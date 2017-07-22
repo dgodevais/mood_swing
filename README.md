@@ -3,7 +3,7 @@ An Alexa app that responds to your mood using music and hue lighting.
 
 Note that this app does NOT require you to have a server running at home. Everything is triggered via IFTTT api calls.
 
-See app demo video here
+[See app demo video here](https://youtu.be/zR0FdYYwTHY)
 
 # Required materials
 * [Amazon Echo/Dot](https://www.amazon.com/dp/product/B00X4WHP5E/ref=EchoCP_dt_tile_text)
