@@ -5,7 +5,7 @@ Note that this app does NOT require you to have a server running at home. Everyt
 
 [See YouTube app demo video here](https://youtu.be/zR0FdYYwTHY)
 
-#Work in progress:
+# Work in progress:
 Dynamically respond to emotions with different lights and music.
 
 Note: unfortunatley, spotify api is limited to 30 second previews (not enough time).
