@@ -23,7 +23,7 @@ Note: unfortunatley, spotify api is limited to 30 second previews (not enough ti
 
 # Config?
 I use a yaml file which looks something like this:
-
+```
 secrets:
     client_id: {some_client_id}...
 
@@ -32,3 +32,4 @@ music:
 
 ifttt:
     {mood_url}: {ifttt_url}
+```
