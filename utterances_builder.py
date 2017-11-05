@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import json
 import logging
+import yaml
 
 from mood_mapper import MoodMapper
 
@@ -15,7 +16,8 @@ def create_mood_utterances(config, file_path):
         mood_mapper = MoodMapper(config)
         for mood in moods:
             mood_mapper.add_synonyms_for_mood_to_mapper(mood)
-
+        for key, val in mood_mapper.mood_mapper.iteritems():
+            print key + ": " + val
         with open(file_path, 'w') as f:
             logger.info('Writing the sample utterances file.')
             for mood in mood_mapper.get_all_moods():
@@ -24,8 +26,8 @@ def create_mood_utterances(config, file_path):
 
 def main():
     logger.info('Starting to build sample utterances.')
-    with open('config.json', 'r') as f:
-        config = json.load(f)
+    with open('config.yaml', 'r') as f:
+        config = yaml.load(f)
         create_mood_utterances(config, './speech_assets/sample_utterances.txt')
     logger.info('Sample utterances complete.')
 

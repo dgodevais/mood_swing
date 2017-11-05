@@ -2,6 +2,7 @@ import base64
 import json
 import logging
 import requests
+import yaml
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("spotify_api")
@@ -47,8 +48,8 @@ class SpotifyApi:
 
 def main():
     logger.info('Starting to build sample utterances.')
-    with open('config.json', 'r') as f:
-        config = json.load(f)
+    with open('config.yaml', 'r') as f:
+        config = yaml.load(f)
         spotify = SpotifyApi(config)
         song_preview = spotify.get_song_preview_url()
         print song_preview

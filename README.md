@@ -15,3 +15,15 @@ Note that this app does NOT require you to have a server running at home. Everyt
 1. [Follow the steps outlined in this tutorial](https://developer.amazon.com/blogs/post/8e8ad73a-99e9-4c0f-a7b3-60f92287b0bf/new-alexa-tutorial-deploy-flask-ask-skills-to-aws-lambda-with-zappa)
 2. [Use this tool to get music links](https://www.wonderplugin.com/online-tools/google-drive-direct-link-generator/)
 3. [Check out this awesome framework for Serverless Python](https://github.com/Miserlou/Zappa)
+
+# Config?
+I use a yaml file which looks something like this:
+
+secrets:
+    client_id: {some_client_id}...
+
+music:
+    {mood}_url: {stream_url}...
+
+ifttt:
+    {mood_url}: {ifttt_url}

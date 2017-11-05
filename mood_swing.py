@@ -1,15 +1,14 @@
 #!/usr/bin/python
 
-import json
 import logging
-import requests
 import time
-import unidecode
-
-from concurrent.futures import ThreadPoolExecutor
-from flask import Flask
-from flask_ask import Ask, statement, question, session, audio
+import yaml
 from random import randint
+
+import requests
+from flask import Flask
+from flask_ask import Ask, question, audio
+from mood_mapper import MoodMapper
 from zappa.async import task
 
 logger = logging.getLogger()
@@ -21,18 +20,27 @@ ask = Ask(app, "/")
 DICT_OFFSET = 1
 
 config = {}
-with open('config.json', 'r') as f:
-    config = json.load(f)
+with open('config.yaml', 'r') as f:
+    config = yaml.load(f)
+
+mood_mapper = MoodMapper(config)
+starter_moods = mood_mapper.get_all_moods()
+for starter_mood in starter_moods:
+    mood_mapper.add_synonyms_for_mood_to_mapper(starter_mood)
+
+mood_to_music_url_map = mood_mapper.mood_to_music_url_mapper
+mood_to_hue_map = mood_mapper.mood_to_hue_mapper
 
 
 @ask.launch
 def start_skill():
     logger.info('Starting the Mood Swing Alexa skill.')
+    my_name = config['secrets']['my_name']
     start_messages = {
-        '0': config['my_name'] + ', what mood are you in?',
-        '1': config['my_name'] + ', how are we feeling?',
+        '0': my_name + ', what mood are you in?',
+        '1': my_name + ', how are we feeling?',
         '2': 'What are your feels?',
-        '3': 'Hi ' + config['my_name'] + ', tell me your mood.'
+        '3': 'Hi ' + my_name + ', tell me your mood.'
     }
 
     start_message = randint(0, len(start_messages) - DICT_OFFSET)
@@ -49,68 +57,29 @@ def give_up():
 
 @task
 def pause_the_lights(hue_url, pause_time=2):
+    logger.info("calling lights: {}".format(hue_url))
     time.sleep(pause_time)
     requests.post(hue_url, data={})
 
 
-@ask.intent("FunkyIntent")
-def funky():
-    logger.info('Hitting the funky intent.')
-    speech = "Oh yeah... feeling funky!"
-    stream_url = config['funky_music_url']
-    hue_url = 'https://maker.ifttt.com/trigger/' + \
-        config['funky_ifttt_url'] + '/with/key/' + config['secret_ifttt_key']
-    pause_the_lights(hue_url, 1)
-    return audio(speech).play(stream_url)
-
-
-@ask.intent("SexyIntent")
-def sexy():
-    logger.info('Hitting the sexy intent.')
-    speech = 'you got it!'
-    sexy_urls = {
-        '0': config['get_it_on_music_url'],
-        '1': config['sex_you_up_music_url'],
-        '2': config['sexual_healing_music_url']
-    }
-    index = randint(0, len(sexy_urls) - DICT_OFFSET)
-    stream_url = sexy_urls[str(index)]
-    hue_url = 'https://maker.ifttt.com/trigger/' + \
-        config['sexy_ifttt_url'] + '/with/key/' + config['secret_ifttt_key']
-    pause_the_lights(hue_url)
-    return audio(speech).play(stream_url)
-
-
-@ask.intent("SadIntent")
-def sad():
-    logger.info('Hitting the sad intent.')
-    speech = 'sorry to hear that'
-    stream_url = config['sad_music_url']
-    hue_url = 'https://maker.ifttt.com/trigger/' + \
-        config['sad_ifttt_url'] + '/with/key/' + config['secret_ifttt_key']
-    pause_the_lights(hue_url)
-    return audio(speech).play(stream_url)
-
-
-@ask.intent("SneakyIntent")
-def sneaky():
-    logger.info('Hitting the sneaky intent.')
-    speech = 'shush...'
-    stream_url = config['sneaky_music_url']
-    hue_url = 'https://maker.ifttt.com/trigger/' + \
-        config['sneaky_ifttt_url'] + '/with/key/' + config['secret_ifttt_key']
-    pause_the_lights(hue_url)
-    return audio(speech).play(stream_url)
+@ask.intent("MoodIntent")
+def set_the_mood(my_mood):
+    speech = "Setting the mood to {}".format(my_mood)
+    logger.info(speech)
+    if my_mood in mood_to_hue_map and my_mood in mood_to_music_url_map:
+        stream_url = mood_to_music_url_map[my_mood]
+        hue_url = mood_to_hue_map[my_mood]
+        pause_the_lights(hue_url, 1)
+        return audio(speech).play(stream_url)
+    else:
+        logger.info('{} not found in mood mapper'.format(my_mood))
+        return stop()
 
 
 @ask.intent('AMAZON.PauseIntent')
 def pause():
     logger.info('Pausing the program.')
-    requests.post(
-        'https://maker.ifttt.com/trigger/' +
-        config['normal_ifttt_url'] + '/with/key/' + config['secret_ifttt_key'],
-        data={}
-    )
+    requests.post(config['ifttt']['normal_url'], data={})
     return audio('Paused the stream.').stop()
 
 
@@ -122,11 +91,7 @@ def resume():
 @ask.intent('AMAZON.StopIntent')
 def stop():
     logger.info('Stopping the program.')
-    requests.post(
-        'https://maker.ifttt.com/trigger/' +
-        config['normal_ifttt_url'] + '/with/key/' + config['secret_ifttt_key'],
-        data={}
-    )
+    requests.post(config['ifttt']['normal_url'], data={})
     return audio('stopping').clear_queue(stop=True)
 
 

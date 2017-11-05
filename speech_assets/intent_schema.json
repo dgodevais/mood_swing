@@ -11,15 +11,6 @@
       }]
     },
     {
-      "intent": "FunkyIntent"
-    },
-    {
-      "intent": "SadIntent"
-    },
-    {
-      "intent": "SneakyIntent"
-    },
-    {
       "intent": "NevermindIntent"
     },
     {
