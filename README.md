@@ -5,6 +5,11 @@ Note that this app does NOT require you to have a server running at home. Everyt
 
 [See YouTube app demo video here](https://youtu.be/zR0FdYYwTHY)
 
+#Work in progress:
+Dynamically respond to emotions with different lights and music.
+
+Note: unfortunatley, spotify api is limited to 30 second previews (not enough time).
+
 # Required materials
 * [Amazon Echo/Dot](https://www.amazon.com/dp/product/B00X4WHP5E/ref=EchoCP_dt_tile_text)
 * [Hue Smart Lights](https://www.amazon.com/gp/product/B06Y3QXSGX/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
