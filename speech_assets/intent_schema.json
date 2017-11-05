@@ -1,0 +1,32 @@
+{
+  "intents": [
+    {
+      "intent": "AMAZON.PauseIntent"
+    },
+    {
+      "intent": "MoodIntent",
+      "slots": [{
+        "name": "moods",
+        "type": "LIST_OF_MOODS"
+      }]
+    },
+    {
+      "intent": "FunkyIntent"
+    },
+    {
+      "intent": "SadIntent"
+    },
+    {
+      "intent": "SneakyIntent"
+    },
+    {
+      "intent": "NevermindIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.ResumeIntent"
+    }
+  ]
+}

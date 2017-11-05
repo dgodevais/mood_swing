@@ -1,0 +1,6 @@
+happy
+sad
+funky
+sneaky
+excited
+angry
