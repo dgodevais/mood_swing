@@ -56,10 +56,14 @@ def give_up():
 
 
 @task
-def pause_the_lights(hue_url, pause_time=2):
+def pause_the_lights(hue_url, pause_time=3, additional_repeat=3):
     logger.info("calling lights: {}".format(hue_url))
     time.sleep(pause_time)
     requests.post(hue_url, data={})
+    for x in range(additional_repeat):
+        time.sleep(10)
+        logger.info("calling lights again: {}".format(hue_url))
+        requests.post(hue_url, data={})
 
 
 @ask.intent("MoodIntent")
@@ -69,7 +73,7 @@ def set_the_mood(my_mood):
     if my_mood in mood_to_hue_map and my_mood in mood_to_music_url_map:
         stream_url = mood_to_music_url_map[my_mood]
         hue_url = mood_to_hue_map[my_mood]
-        pause_the_lights(hue_url, 1)
+        pause_the_lights(hue_url, pause_time=3, additional_repeat=2)
         return audio(speech).play(stream_url)
     else:
         logger.info('{} not found in mood mapper'.format(my_mood))
