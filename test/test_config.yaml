@@ -1,0 +1,26 @@
+secrets:
+  ifttt_code: "abcdef"
+
+mood_sequences:
+  - name: "funky"
+    song_url: "sdf"
+    light_sequence:
+      - hue_url:    "funky1"
+        play_time:  16
+      - hue_url:    "funky2"
+        play_time:  16
+  - name: "happy"
+    song_url: "asdf"
+    light_sequence:
+      - hue_url:    "happy1"
+        play_time:  16
+  - name: "sneaky"
+    song_url: "asfewf"
+    light_sequence:
+      - hue_url:    "sneaky1"
+        play_time:  16
+  - name: "sad"
+    song_url: "ercss"
+    light_sequence:
+      - hue_url:    "sad1"
+        play_time:  16

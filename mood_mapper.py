@@ -46,6 +46,7 @@ class MoodMapper:
                     self.mood_to_music_url_mapper[sim] = self.config['music'][mood_music_key]
                     mood_hue_key = '{}_url'.format(mood_formatted)
                     self.mood_to_hue_mapper[sim] = self.config['ifttt'][mood_hue_key]
+            logger.info('Finished retrieving mood synonyms.')
         except requests.RequestException as e:
             logger.error('Request failed: ' + str(e))
         except ValueError as e:
