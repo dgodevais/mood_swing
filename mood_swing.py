@@ -137,13 +137,6 @@ def set_the_mood(my_mood):
         logger.info('{} not found in mood mapper'.format(my_mood))
         return stop()
 
-# @ask.intent("ChangeIntent")
-# def change_mood():
-#     logger.info('Changing the mood.')
-#     speech = "What would you like to change your mood to?"
-#     normalize_lights()
-#     return audio(speech)
-
 
 def normalize_lights():
     logger.info('Resetting lights.')
